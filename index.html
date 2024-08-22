@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+        }
+
+        .chatbot-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            max-height: 500px;
+            border: 2px solid #59D904; /* Lime green border */
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chatbot-header {
+            background-color: #59D904; /* Lime green header */
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            position: relative;
+        }
+
+        .chatbot-header .collapse-btn {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            cursor: pointer;
+            font-size: 18px;
+            transform: rotate(45deg); /* Rotate to make a tick */
+            width: 12px;
+            height: 12px;
+            border-right: 2px solid white;
+            border-bottom: 2px solid white;
+        }
+
+        .chatbot-messages {
+            padding: 10px;
+            height: 400px;
+            overflow-y: auto;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chatbot-input {
+            display: flex;
+            border-top: 1px solid #ddd;
+        }
+
+        .chatbot-input input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 0;
+            border-top-left-radius: 10px;
+            outline: none;
+        }
+
+        .chatbot-input button {
+            padding: 10px;
+            background-color: #59D904; /* Lime green button */
+            color: white;
+            border: none;
+            border-top-right-radius: 10px;
+            cursor: pointer;
+        }
+
+        .chatbot-input button:hover {
+            background-color: #59D904;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 15px;
+            display: inline-block;
+            word-wrap: break-word;
+            max-width: 80%;
+        }
+
+        .message.user {
+            background-color: #59D904; /* Lime green bubble */
+            color: white;
+            align-self: flex-end;
+            text-align: right;
+            margin-left: auto;
+        }
+
+        .message.bot {
+            background-color: #E0E0E0; /* Gray bubble */
+            color: black;
+            align-self: flex-start;
+            text-align: left;
+            margin-right: auto;
+        }
+
+        .collapsed-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 100px;
+            height: 50px;
+            background-color: #59D904;
+            color: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: none; /* Initially hidden */
+        }
+    </style>
+</head>
+<body>
+    <div class="chatbot-container" id="chatbotContainer">
+        <div class="chatbot-header">
+            Chat with us!
+            <div class="collapse-btn" id="collapseBtn"></div>
+        </div>
+        <div class="chatbot-messages" id="chatbotMessages">
+            <!-- Messages will appear here -->
+        </div>
+        <div class="chatbot-input">
+            <input type="text" id="userInput" placeholder="Type a message..." onkeydown="checkEnterKey(event)" />
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <div class="collapsed-container" id="collapsedContainer">
+        AI Bot
+    </div>
+
+    <script>
+        document.getElementById('collapseBtn').addEventListener('click', function() {
+            document.getElementById('chatbotContainer').style.display = 'none';
+            document.getElementById('collapsedContainer').style.display = 'flex';
+        });
+
+        document.getElementById('collapsedContainer').addEventListener('click', function() {
+            document.getElementById('chatbotContainer').style.display = 'flex';
+            document.getElementById('collapsedContainer').style.display = 'none';
+        });
+
+        function checkEnterKey(event) {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        }
+
+        async function sendMessage() {
+            const userInput = document.getElementById('userInput');
+            const chatbotMessages = document.getElementById('chatbotMessages');
+
+            if (userInput.value.trim() === '') return;
+
+            // Append user's message
+            const userMessageDiv = document.createElement('div');
+            userMessageDiv.className = 'message user';
+            userMessageDiv.textContent = userInput.value;
+            chatbotMessages.appendChild(userMessageDiv);
+
+            // Clear input field before sending the message
+            userInput.value = '';
+
+            // Scroll to the bottom
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+
+            const response = await fetch('http://localhost:5000/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ prompt: userMessageDiv.textContent })
+            });
+
+            const data = await response.json();
+
+            // Append bot's response
+            const botMessageDiv = document.createElement('div');
+            botMessageDiv.className = 'message bot';
+            botMessageDiv.textContent = data.response;
+            chatbotMessages.appendChild(botMessageDiv);
+
+            // Scroll to the bottom
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        }
+    </script>
+</body>
+</html>
