@@ -7,7 +7,7 @@ import os
 app = Flask(__name__)
 CORS(app)
 
-# Replace with your actual OpenAI API key and Telegram credentials
+# Fetch API keys and tokens from environment variables
 openai.api_key = os.getenv("OPENAI_API_KEY")
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
@@ -34,18 +34,22 @@ def send_message_to_telegram(message):
     except requests.exceptions.Timeout as errt:
         print(f"Timeout Error: {errt}")
     except requests.exceptions.RequestException as err:
-        print(f"OOps: Something Else {err}")
+        print(f"Oops: Something Else {err}")
 
 def chat_with_GPT(prompt, knowledge_base):
-    response = openai.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[
-            {"role": "system", "content": "You are a friendly consultant for an online design project service. Only answer questions based on the provided knowledge base. If the answer is not in the knowledge base, ask user to leave his e-mail, and the expert will answer soon. Don't forget to ask how the client would like to be addressed"},
-            {"role": "system", "content": f"Knowledge base: {knowledge_base}"},
-            {"role": "user", "content": prompt}
-        ]
-    )
-    return response.choices[0].message.content.strip()
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",  # Use an appropriate model name
+            messages=[
+                {"role": "system", "content": "You are a friendly consultant for an online design project service. Only answer questions based on the provided knowledge base. If the answer is not in the knowledge base, ask the user to leave their email, and the expert will answer soon. Don't forget to ask how the client would like to be addressed."},
+                {"role": "system", "content": f"Knowledge base: {knowledge_base}"},
+                {"role": "user", "content": prompt}
+            ]
+        )
+        return response.choices[0].message['content'].strip()
+    except Exception as e:
+        print(f"Error communicating with OpenAI: {e}")
+        return "I'm sorry, but I couldn't process your request at this time. Please try again later."
 
 knowledge_base = load_knowledge_base('knowledge.txt')
 
