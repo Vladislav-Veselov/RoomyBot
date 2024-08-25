@@ -53,6 +53,10 @@ def chat_with_GPT(prompt, knowledge_base):
 
 knowledge_base = load_knowledge_base('knowledge.txt')
 
+@app.route('/ping', methods=['GET'])
+def ping():
+    return jsonify({'message': 'Server is awake'}), 200
+
 @app.route('/chat', methods=['POST'])
 def chat():
     data = request.json
