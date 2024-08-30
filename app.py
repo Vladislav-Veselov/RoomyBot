@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, session
 import openai
 import requests
 from flask_cors import CORS
@@ -7,7 +7,7 @@ import os
 app = Flask(__name__)
 CORS(app)
 
-# Fetch API keys and tokens from environment variables
+app.secret_key = os.getenv('FLASK_SECRET_KEY')
 openai.api_key = os.getenv("OPENAI_API_KEY")
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
@@ -22,11 +22,11 @@ def send_message_to_telegram(message):
     payload = {
         'chat_id': TELEGRAM_CHAT_ID,
         'text': message,
-        'parse_mode': 'Markdown'  # Allows for text formatting
+        'parse_mode': 'Markdown'
     }
     try:
         response = requests.post(url, json=payload)
-        response.raise_for_status()  # Raises an HTTPError if the HTTP request returned an unsuccessful status code
+        response.raise_for_status()
     except requests.exceptions.HTTPError as errh:
         print(f"Http Error: {errh}")
     except requests.exceptions.ConnectionError as errc:
@@ -36,15 +36,20 @@ def send_message_to_telegram(message):
     except requests.exceptions.RequestException as err:
         print(f"Oops: Something Else {err}")
 
-def chat_with_GPT(prompt, knowledge_base):
+def chat_with_GPT(prompt, knowledge_base, history):
     try:
+        messages = [
+            {"role": "system", "content": "You are a friendly consultant for an online design project service. Only answer questions based on the provided knowledge base. If the answer is not in the knowledge base, ask the user to leave their email for the expert, unless the question is completely out of our product topic. Be a little humorous. Shorten very long answers if possible. Also, do not use headers and paragraphs, use just plain text"},
+            {"role": "system", "content": f"Knowledge base: {knowledge_base}"}
+        ]
+
+        # Include the conversation history in the message to the model
+        messages.extend(history)
+        messages.append({"role": "user", "content": prompt})
+
         response = openai.ChatCompletion.create(
-            model="gpt-4o",  # Use an appropriate model name
-            messages=[
-                {"role": "system", "content": "You are a friendly consultant for an online design project service. Only answer questions based on the provided knowledge base. If the answer is not in the knowledge base, ask the user to leave their email, and the expert will answer soon. Ask for customer's name, but ask it once. Be a little humorous. Shorten very long answers if possible. Also, do not use headers and paragraphs, use just plain text"},
-                {"role": "system", "content": f"Knowledge base: {knowledge_base}"},
-                {"role": "user", "content": prompt}
-            ]
+            model="gpt-4o",
+            messages=messages
         )
         return response.choices[0].message['content'].strip()
     except Exception as e:
@@ -62,16 +67,25 @@ def chat():
     data = request.json
     prompt = data['prompt']
 
+    # Initialize the session history if it doesn't exist
+    if 'history' not in session:
+        session['history'] = []
+
+    # Append the user prompt to the session history
+    session['history'].append({"role": "user", "content": prompt})
+
     # Log and send user's prompt to Telegram
     print(f"Received prompt: {prompt}")
-    send_message_to_telegram(f"*Client:* {prompt}")
+    send_message_to_telegram(f"*🤔 Client:* {prompt}")
 
-    # Get the response from GPT
-    response = chat_with_GPT(prompt, knowledge_base)
+    # Generate a response using OpenAI's API
+    response = chat_with_GPT(prompt, knowledge_base, session['history'])
 
-    # Log and send bot's response to Telegram
+    # Append the bot's response to the session history
+    session['history'].append({"role": "assistant", "content": response})
+
     print(f"Response: {response}")
-    send_message_to_telegram(f"*Bot:* {response}")
+    send_message_to_telegram(f"*🤖 Bot:* {response}")
 
     return jsonify({'response': response})
 
