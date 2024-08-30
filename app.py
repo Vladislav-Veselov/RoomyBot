@@ -19,7 +19,7 @@ TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
 # Configure session settings
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'  # Lax is usually a good balance for cross-origin requests
-app.config['SESSION_COOKIE_SECURE'] = False  # Set to False for local testing; True for production with HTTPS
+app.config['SESSION_COOKIE_SECURE'] = True  # Set to False for local testing; True for production with HTTPS
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)  # Session timeout
 app.config['SESSION_TYPE'] = 'filesystem'  # Store sessions in the filesystem
 
