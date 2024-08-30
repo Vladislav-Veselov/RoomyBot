@@ -7,7 +7,9 @@ from datetime import timedelta
 
 # Initialize Flask application
 app = Flask(__name__)
-CORS(app)
+
+# CORS configuration to allow credentials (cookies) to be sent
+CORS(app, supports_credentials=True)
 
 # Configuration
 app.secret_key = os.getenv('FLASK_SECRET_KEY')
@@ -16,8 +18,8 @@ TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
 # Configure session settings
-app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'  # Adjust as needed (Lax, Strict, None)
-app.config['SESSION_COOKIE_SECURE'] = True  # Ensure it's True if using HTTPS
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'  # Lax is usually a good balance for cross-origin requests
+app.config['SESSION_COOKIE_SECURE'] = False  # Set to False for local testing; True for production with HTTPS
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)  # Session timeout
 app.config['SESSION_TYPE'] = 'filesystem'  # Store sessions in the filesystem
 
