@@ -49,7 +49,7 @@ def chat_with_GPT(prompt, knowledge_base, history):
         messages.append({"role": "user", "content": prompt})
 
         response = openai.ChatCompletion.create(
-            model="gpt-4",
+            model="gpt-4o",
             messages=messages
         )
         return response.choices[0].message['content'].strip()
@@ -69,13 +69,16 @@ def chat():
     data = request.json
     prompt = data['prompt']
 
+    # Debugging: Print session details
+    print(f"Session before processing: {session.get('history', [])}")
+
     # Initialize the session history if it doesn't exist
     if 'history' not in session:
         session['history'] = []
 
     # Append the user prompt to the session history
     session['history'].append({"role": "user", "content": prompt})
-    session.modified = True  # Mark session as modified to ensure it is saved
+    session.modified = True  # Ensure session is marked as modified
 
     # Log and send user's prompt to Telegram
     print(f"Received prompt: {prompt}")
@@ -86,7 +89,10 @@ def chat():
 
     # Append the bot's response to the session history
     session['history'].append({"role": "assistant", "content": response})
-    session.modified = True  # Mark session as modified to ensure it is saved
+    session.modified = True  # Ensure session is marked as modified
+
+    # Debugging: Print session details
+    print(f"Session after processing: {session.get('history', [])}")
 
     print(f"Response: {response}")
     send_message_to_telegram(f"*🤖 Bot:* {response}")
