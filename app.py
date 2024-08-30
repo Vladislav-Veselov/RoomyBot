@@ -38,6 +38,9 @@ def send_message_to_telegram(message):
 
 def chat_with_GPT(prompt, knowledge_base, history):
     try:
+        # Log the entire history to check if it includes previous conversation
+        print("Current conversation history:", history)
+
         messages = [
             {"role": "system", "content": "You are a friendly consultant for an online design project service. Only answer questions based on the provided knowledge base. If the answer is not in the knowledge base, ask the user to leave their email for the expert, unless the question is completely out of our product topic. Be a little humorous. Shorten very long answers if possible. Also, do not use headers and paragraphs, use just plain text"},
             {"role": "system", "content": f"Knowledge base: {knowledge_base}"}
@@ -48,7 +51,7 @@ def chat_with_GPT(prompt, knowledge_base, history):
         messages.append({"role": "user", "content": prompt})
 
         response = openai.ChatCompletion.create(
-            model="gpt-4o",
+            model="gpt-4o",  # Ensure you're using the correct model
             messages=messages
         )
         return response.choices[0].message['content'].strip()
@@ -87,7 +90,10 @@ def chat():
     session['history'].append({"role": "assistant", "content": response})
     session.modified = True  # Mark the session as modified
 
-    # Truncate history if necessary
+    # Log the updated session history for debugging
+    print("Updated session history:", session['history'])
+
+    # Truncate history if necessary to prevent session overflow
     max_history_length = 20  # Set a limit on the number of messages to store
     if len(session['history']) > max_history_length:
         session['history'] = session['history'][-max_history_length:]
