@@ -3,15 +3,23 @@ import openai
 import requests
 from flask_cors import CORS
 import os
+from datetime import timedelta
 
+# Initialize Flask application
 app = Flask(__name__)
 CORS(app)
 
-# Ensure your secret key is securely set
+# Configuration
 app.secret_key = os.getenv('FLASK_SECRET_KEY')
 openai.api_key = os.getenv("OPENAI_API_KEY")
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
+
+# Configure session settings
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'  # Adjust as needed (Lax, Strict, None)
+app.config['SESSION_COOKIE_SECURE'] = True  # Ensure it's True if using HTTPS
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)  # Session timeout
+app.config['SESSION_TYPE'] = 'filesystem'  # Store sessions in the filesystem
 
 def load_knowledge_base(file_path):
     with open(file_path, 'r', encoding='utf-8') as file:
@@ -69,8 +77,12 @@ def chat():
     data = request.json
     prompt = data['prompt']
 
-    # Debugging: Print session details
+    # Debugging: Print session details and cookie info
+    print(f"Cookies: {request.cookies}")
     print(f"Session before processing: {session.get('history', [])}")
+
+    # Mark the session as permanent to apply the session lifetime
+    session.permanent = True
 
     # Initialize the session history if it doesn't exist
     if 'history' not in session:
