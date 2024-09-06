@@ -22,12 +22,13 @@ def load_knowledge_base(file_path):
         knowledge_base = file.read()
     return knowledge_base
 
-# Function to send messages to Telegram
-def send_message_to_telegram(message):
+# Function to send messages to Telegram with user ID
+def send_message_to_telegram(message, user_id):
+    message_with_id = f"{message} ({user_id})"  # Append the user ID in round parentheses
     url = f'https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage'
     payload = {
         'chat_id': TELEGRAM_CHAT_ID,
-        'text': message,
+        'text': message_with_id,
         'parse_mode': 'Markdown'  # Allows for text formatting
     }
     try:
@@ -46,7 +47,7 @@ def send_message_to_telegram(message):
 def chat_with_GPT(prompt, history):
     try:
         response = openai.ChatCompletion.create(
-            model="gpt-4",  # Use an appropriate model name
+            model="gpt-4o",
             messages=history + [{"role": "user", "content": prompt}]
         )
         return response.choices[0].message['content'].strip()
@@ -87,7 +88,7 @@ def chat():
         session_histories[user_id] = load_session_history(user_id)
         if not session_histories[user_id]:
             session_histories[user_id] = [
-                {"role": "system", "content": "You are a friendly consultant for an online design project service. Only answer questions based on the provided knowledge base. If the answer is not in the knowledge base and the question is related to the interior design topic, ask the user to leave their email, and the expert will answer soon. Ask how customer would like to be adressed, do it once. Be a little humorous."},
+                {"role": "system", "content": "You are a friendly consultant for an online design project service. Only answer questions based on the provided knowledge base. If the answer is not in the knowledge base and the question is related to the interior design topic, ask the user to leave their email, and the expert will answer soon. Ask how customer would like to be addressed, do it once."},
                 {"role": "system", "content": f"Knowledge base: {knowledge_base}"}
             ]
 
@@ -95,7 +96,7 @@ def chat():
     session_histories[user_id].append({"role": "user", "content": prompt})
 
     # Send the user's message to Telegram for logging
-    send_message_to_telegram(f"*💁 Client:* {prompt}")
+    send_message_to_telegram(f"*💁 Client:* {prompt}", user_id)
 
     # Get the GPT response with context (history)
     response = chat_with_GPT(prompt, session_histories[user_id])
@@ -107,7 +108,7 @@ def chat():
     save_session_history(user_id)
 
     # Send the bot's response to Telegram for logging
-    send_message_to_telegram(f"*🤖 Bot:* {response}")
+    send_message_to_telegram(f"*🤖 Bot:* {response}", user_id)
 
     # Return the bot's response to the frontend
     return jsonify({'response': response})
