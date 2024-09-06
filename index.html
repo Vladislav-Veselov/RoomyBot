@@ -36,7 +36,7 @@
             text-align: center;
             font-weight: bold;
             position: relative;
-            border-bottom: 1.5px solid white; /* Added white bottom border for separation */
+            border-bottom: 1px solid white; /* Added white bottom border for separation */
         }
 
         .chatbot-header .collapse-btn {
@@ -142,7 +142,7 @@
             display: inline-block;
             width: 8px;
             height: 8px;
-            background-color: #E0E0E0; /* Gray color for dots */
+            background-color: #797979; /* Gray color for dots */
             border-radius: 50%;
             margin-right: 5px;
             animation: typing 1s infinite;
@@ -192,18 +192,12 @@
     </div>
 
     <script>
-        // Function to replace Markdown-style syntax with HTML tags
-        function formatMarkdown(text) {
-            // Bold and italic: ***text***
-            text = text.replace(/\*\*\*(.*?)\*\*\*/g, '<b><i>$1</i></b>');
-            
-            // Bold: **text**
-            text = text.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+        let sessionId = localStorage.getItem('sessionId');
 
-            // Italic: *text*
-            text = text.replace(/\*(.*?)\*/g, '<i>$1</i>');
-
-            return text;
+        // Generate a unique session ID if one doesn't exist
+        if (!sessionId) {
+            sessionId = Math.random().toString(36).substring(2);
+            localStorage.setItem('sessionId', sessionId);
         }
 
         // Handle collapse and expand functionality
@@ -256,7 +250,10 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ prompt: userMessageDiv.textContent })
+                    body: JSON.stringify({ 
+                        prompt: userMessageDiv.textContent,
+                        user_id: sessionId  // Send the session ID
+                    })
                 });
 
                 if (!response.ok) {
@@ -268,13 +265,10 @@
                 // Remove typing indicator
                 typingIndicator.remove();
 
-                // Format bot's response using Markdown
-                const formattedResponse = formatMarkdown(data.response);
-
                 // Append bot's response
                 const botMessageDiv = document.createElement('div');
                 botMessageDiv.className = 'message bot';
-                botMessageDiv.innerHTML = formattedResponse; // Use innerHTML to render formatted text
+                botMessageDiv.textContent = data.response;
                 chatbotMessages.appendChild(botMessageDiv);
 
             } catch (error) {
@@ -299,7 +293,7 @@
             if (chatbotMessages.children.length === 0) {
                 const greetingMessageDiv = document.createElement('div');
                 greetingMessageDiv.className = 'message bot';
-                greetingMessageDiv.innerHTML = "Hello! I'm Roomy, your friendly AI bot. I'm here to answer any questions you have! 😊<br><br>What is your name?";
+                greetingMessageDiv.textContent = "Hello! I'm Roomy, your friendly AI bot. Feel free to ask me anything about our services — I'm here to help! 😊";
                 chatbotMessages.appendChild(greetingMessageDiv);
 
                 // Scroll to the bottom
