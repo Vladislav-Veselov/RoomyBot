@@ -3,36 +3,18 @@ import openai
 import requests
 from flask_cors import CORS
 import os
-from sqlalchemy import create_engine, Column, Integer, String, Text
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+import json
 
 app = Flask(__name__)
 CORS(app)
-
-# Set up SQLite database
-DATABASE_URL = "sqlite:///chatbot.db"
-engine = create_engine(DATABASE_URL)
-Base = declarative_base()
-
-# Define a session for database interactions
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-# Database Model for storing chat history
-class ChatHistory(Base):
-    __tablename__ = "chat_histories"
-    id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(String, index=True)
-    role = Column(String)  # 'user' or 'assistant'
-    content = Column(Text)
-
-# Create the database table
-Base.metadata.create_all(bind=engine)
 
 # Fetch API keys and tokens from environment variables
 openai.api_key = os.getenv("OPENAI_API_KEY")
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
+
+# In-memory storage for session history (replace with a database in production)
+session_histories = {}
 
 # Function to load the knowledge base
 def load_knowledge_base(file_path):
@@ -72,29 +54,18 @@ def chat_with_GPT(prompt, history):
         print(f"Error communicating with OpenAI: {e}")
         return "I'm sorry, but I couldn't process your request at this time. Please try again later."
 
-# Function to load chat history from the database
-def load_session_history(user_id):
-    db = SessionLocal()
-    history = db.query(ChatHistory).filter_by(user_id=user_id).all()
-    db.close()
-    
-    # Format history into a list of dictionaries for GPT input
-    formatted_history = [{"role": entry.role, "content": entry.content} for entry in history]
-    
-    if not formatted_history:
-        formatted_history = [
-            {"role": "system", "content": "You are a friendly consultant for an online design project service."},
-            {"role": "system", "content": f"Knowledge base: {knowledge_base}"}
-        ]
-    return formatted_history
+# Function to save session history to a file
+def save_session_history(user_id):
+    with open(f"history_{user_id}.json", "w") as file:
+        json.dump(session_histories[user_id], file)
 
-# Function to save chat history to the database
-def save_message_to_db(user_id, role, content):
-    db = SessionLocal()
-    chat_message = ChatHistory(user_id=user_id, role=role, content=content)
-    db.add(chat_message)
-    db.commit()
-    db.close()
+# Function to load session history from a file (if exists)
+def load_session_history(user_id):
+    try:
+        with open(f"history_{user_id}.json", "r") as file:
+            return json.load(file)
+    except FileNotFoundError:
+        return []
 
 # Load the knowledge base
 knowledge_base = load_knowledge_base('knowledge.txt')
@@ -112,22 +83,31 @@ def chat():
     user_id = data.get('user_id', 'anonymous')
 
     # Load or initialize session history for the user
-    history = load_session_history(user_id)
+    if user_id not in session_histories:
+        session_histories[user_id] = load_session_history(user_id)
+        if not session_histories[user_id]:
+            session_histories[user_id] = [
+                {"role": "system", "content": "You are a friendly consultant for an online design project service. Only answer questions based on the provided knowledge base. If the answer is not in the knowledge base and the question is related to the interior design topic, ask the user to leave their email, and the expert will answer soon. Ask how customer would like to be adressed, do it once. Be a little humorous."},
+                {"role": "system", "content": f"Knowledge base: {knowledge_base}"}
+            ]
 
-    # Append the user's message to the history in the database
-    save_message_to_db(user_id, "user", prompt)
+    # Append the user's message to the history
+    session_histories[user_id].append({"role": "user", "content": prompt})
 
     # Send the user's message to Telegram for logging
-    send_message_to_telegram(f"*Client:* {prompt}")
+    send_message_to_telegram(f"*💁 Client:* {prompt}")
 
     # Get the GPT response with context (history)
-    response = chat_with_GPT(prompt, history)
+    response = chat_with_GPT(prompt, session_histories[user_id])
 
-    # Save GPT's response to the database
-    save_message_to_db(user_id, "assistant", response)
+    # Append GPT's response to the history
+    session_histories[user_id].append({"role": "assistant", "content": response})
+
+    # Save the session history to a file for persistence
+    save_session_history(user_id)
 
     # Send the bot's response to Telegram for logging
-    send_message_to_telegram(f"*Bot:* {response}")
+    send_message_to_telegram(f"*🤖 Bot:* {response}")
 
     # Return the bot's response to the frontend
     return jsonify({'response': response})
