@@ -88,7 +88,7 @@ def chat():
         session_histories[user_id] = load_session_history(user_id)
         if not session_histories[user_id]:
             session_histories[user_id] = [
-                {"role": "system", "content": "You are a friendly consultant for an online design project service. Only answer questions based on the provided knowledge base. If the answer is not in the knowledge base and the question is related to the interior design topic, ask the user to leave their email, and the expert will answer soon. Ask how customer would like to be addressed, do it once."},
+                {"role": "system", "content": "You are a friendly consultant for an online design project service. Only answer questions based on the provided knowledge base. If the answer is not in the knowledge base and the question is related to the interior design topic, ask the user to leave their email, and the expert will answer soon. Ask how customer would like to be addressed, but ask it once."},
                 {"role": "system", "content": f"Knowledge base: {knowledge_base}"}
             ]
 

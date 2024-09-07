@@ -1,79 +1,124 @@
-# 1. Service Overview
-Roomy (www.roomy-design.com) is an online platform providing interior design services exclusively for residential spaces. It covers various room types, including kitchens, living rooms, bedrooms, children’s rooms, bathrooms, home offices, terraces, balconies, and more. Clients can order designs for one or more rooms simultaneously or sequentially, with each room treated as an independent project in terms of order, execution, and payment.
-Note: Commercial spaces (cafes, offices, etc.) are not included.
-________________________________________
-# 2. Website Structure and Key Client Information
-•	Header: Displays logo, slogan ("bespoke interiors online"), site navigation, and "Start Your Project" button.
-•	Intro Block: “Get your custom interior online. For any room, any mood, any dream.” Highlights: Starting price, first delivery in 3 days, no upfront payment.
-•	Before/After Slider: Showcases five visualizations of interiors post-design vs. “before” photos.
-•	How It Works: The six-step workflow:
-    1.	Share your vision: Communicate your preferences and expectations.
-    2.	Initial data: Upload room photos/videos and a layout plan.
-    3.	Collaborate: Review design options and provide feedback.
-    4.	Receive custom interior: Delivered as a PDF album.
-    5.	Get shopping list: Includes prices and links to stores.
-    6.	Ongoing support: Free consultations during renovation.
-•	Package Details: Product cards with options and pricing, each containing a "What will I get" button leading to more details.
-    o	Basic Set for Light Space Makeover: Layout plan, 2 style concepts, shopping list.
-    o	In-depth Renovation Package: 3D visualizations, VR tour, renovation drawings.
-•	Portfolio: Six galleries displaying room designs, categorized by room type.
-•	Achievements: Over 5 years, 850+ designed rooms, 15,300 sqm+ spaces, and 370+ satisfied customers.
-•	Why Choose Us: Online convenience, custom-tailored design, and continuous support.
-•	FAQ Block: Provides answers to common queries.
-•	Footer: Navigation links, Terms & Conditions, Privacy Policy, and contact email.
-________________________________________
-# 3. How to Order a Room Interior Design
-1.	Start your project: Click "Start Your Project" on the website.
-2.	Select room type(s): Choose the room(s) you need designed.
-3.	Submit form: Provide name, email (required), and WhatsApp (optional).
-4.	Email confirmation: Follow the link in the confirmation email to fill out a detailed questionnaire with room preferences and attach photos/plans.
-After receiving the information, we will follow up (via email or WhatsApp) to ask clarifying questions, request additional materials if needed, and finalize the package selection. Once clarified, we will send an invoice for a 50% deposit before starting the project.
-________________________________________
-# 4. Package Options
-1.	Basic Set for Light Space Makeover – €399
-    o	Room layout plan (top-down view with dimensions).
-    o	2 interior design style concepts (furniture, color schemes, textiles, decor).
-    o	Shopping list with images, prices, and store links.
-    o	Optional Add-ons: 3D Visualization + VR Tour (€299), Renovation Drawings (€349).
-2.	Renovation Drawings – €349
-    o   Includes detailed technical plans for walls, ceilings, flooring, lighting, outlets, and electrical fixtures:
-    o   Wall Elevation: Detailed height view with finishes.
-    o   Ceiling Plan: Layout of structural elements, ventilation, and finishes.
-    o   Flooring Plan: Comprehensive floor design.
-    o   Lighting Plan: Placement of fixtures and interaction with the design.
-    o   Lighting Control Plan: Switches, dimmers, and zones.
-    o   Outlet Placement Plan: Electrical outlet locations and types.
-    o   Electrical Fixture Specs: Detailed list of switches, outlets, and components.
-________________________________________
-# 5. Pricing and Payment
-•	Basic Package: €399.
-•	3D Visualization: €299.
-•	Renovation Drawings: €349.
-Prices apply regardless of room type or size. If the room exceeds standard complexity, additional fees will be communicated in advance. After the 50% advance payment, we begin the project. Clients provide feedback throughout, and revisions are made until satisfaction is achieved. Upon completion, a PDF is sent, followed by the remaining payment request. The shopping list is sent separately within 3 days of full payment. Free support is available throughout the renovation, and errors are corrected at no additional cost.
-________________________________________
-# 6. Special Guidelines and Custom Requests
-•	Communication: All interactions are via email or WhatsApp (no phone communication).
-•	Required Elements: Drawings cannot be ordered without concept boards.
-•	Combined Spaces: If a room has multiple functional zones (e.g., kitchen-living room), it counts as one room for pricing. If more than two zones exist, project details are reviewed before final pricing.
-•	Custom Orders: For requests outside standard packages (e.g., specific elements or whole apartment/house projects), we can create custom proposals. Clients should email a detailed request to info@roomy-design.com.
-________________________________________
-# 7. Frequently Asked Questions (FAQ)
-•	**Why does Roomy stand out?**
-    o	Unlimited edits.
-    o	Realistic renders and VR walkthroughs.
-    o	Step-by-step renovation guide.
-    o	Support throughout the renovation process.
-    o	Satisfaction guaranteed, no hidden fees.
-•	**What experience does Roomy have?** Since 2018, Roomy has completed over 850 projects under its "Online Interior Solutions" concept, making interior design accessible globally.
-•	**Who are the designers?** Our designers have architecture/design degrees and at least 3 years of industry experience. They undergo strict accreditation, and their work is double-checked before delivery.
-•	**What if I don’t like the design?** We revise the design until you’re happy. If necessary, we can switch designers.
-•	**Where do you work?** As an online studio, we serve clients worldwide.
-•	**How do you work within my budget?** We discuss your budget upfront and tailor the design to fit it.
-•	**How do I take measurements for the project?** A simple hand-drawn sketch with measurements is sufficient. We provide guidance on taking these measurements.
-•	**Can I include existing furniture or materials?** Yes, just send us photos and details, and we’ll incorporate them into the design.
-•	**Which project should I choose?**
-    o	For a light refresh (new furniture, textiles, decor): Basic package.
-    o	For major renovations (structural changes, electrical work): Full package.
-•	**How long does a project take?** Typically between 5–15 days, depending on the project's complexity and how quickly feedback is provided.
-________________________________________
-This version preserves all the information from your original document, with improved flow, readability, and ease of reference for a chatbot consultant. Each section is clear, concise, and logically structured for both user queries and chatbot responses.
+## **Knowledge Base for the Roomy Design AI Bot**
+
+### **Service Overview**
+**Roomy** is an online platform providing interior design services exclusively for residential spaces, such as apartments, private homes, studios, and condominiums. We do not work with commercial spaces (cafes, offices, etc.). The platform covers all types of rooms, including kitchens, living rooms, bedrooms, children's rooms, bathrooms, home offices, terraces, balconies, and other living areas.
+
+### **Who Is This Service For?**
+Roomy services are ideal for those who want to create a unique interior in their home or apartment without leaving their own space. We offer a convenient way to collaborate with top designers worldwide, using a flexible schedule and eliminating the need for travel. Our service is suitable for those planning a simple interior refresh or a deep renovation involving layout changes and technical modifications.
+
+### **Services and Packages**
+Roomy offers the following services and packages:
+
+1. **Basic Package for a Simple Room Refresh** - €399:
+   - **Room Layout Plan:** A top-down view of the room layout with dimensions and furniture arrangement.
+   - **Two Interior Design Concepts:** Visual interior concepts, including color schemes, selection of wall and floor coverings, furniture, lighting fixtures, textiles, and decorative elements.
+   - **Shopping List:** A list of materials and items included in the design project, with prices and links to purchase online.
+   - **Up to 5 Revisions:** Clients can make up to five revisions to the room layout and design style without additional cost.
+
+2. **Package for In-Depth Renovation**:
+   - **3D Visualization and VR Tour** - €299:
+     - **3D Visualization:** Photorealistic images of the interior, created using 3D modeling, showcasing the designed space from different angles.
+     - **VR Tour:** A virtual tour of the designed interior using spherical projections, available on [kuula.co](https://kuula.co/profile/eDom/posts).
+   - **Renovation Drawings** - €349:
+     - **Technical Drawings and Schematics:** Includes:
+       - **Wall Elevations:** Detailed wall drawings indicating height and finishing materials.
+       - **Ceiling Plan:** Layout of ceiling structures, ventilation, and finishes.
+       - **Floor Plan:** Comprehensive floor design.
+       - **Lighting Plan:** Placement of lighting fixtures and their interaction with other design elements.
+       - **Lighting Control Plan:** Location of switches, dimmers, and lighting zones.
+       - **Outlet Placement Plan:** Locations and specifications for electrical outlets.
+       - **Electrical Fixture Specifications:** Detailed list of switches, outlets, and components.
+
+#### **Package Combinations:**
+- **Basic Package** - €399.
+- **Basic Package + 3D Visualization and VR Tour** - €698.
+- **Basic Package + Renovation Drawings** - €748.
+- **Full Package (Basic Package + 3D Visualization + Renovation Drawings)** - €1047.
+
+#### **Difference Between Simple Refresh and In-Depth Renovation:**
+- **Simple Interior Refresh (Basic set for Simple room refresh):** Suitable for those who want to refresh their interior with new furniture, textiles, and decor without requiring changes to the layout, electrical, or structural work.
+- **In-Depth Renovation (In-depth renovation):** Required when structural changes are needed, such as moving walls, altering electrical and plumbing systems, or a complete space overhaul.
+
+#### **Additional Conditions:**
+- To order the "Package for In-Depth Room Renovation," the "Basic Set for Simple Room Refresh" must first be completed.
+- "Renovation Drawings" can be ordered separately from the 3D Visualization and VR Tour.
+- If more than 5 revisions are needed for the layout and style, additional fees may apply.
+
+### **Ordering and Payment Process**
+1. **Project Start:**
+   - To start a project, the client clicks the **"Launch Your Project"** button on the website and selects the room they wish to design.
+   - In response to the request, a link to a detailed questionnaire is sent to the client's email, where they can specify their preferences and project requirements. The client may also attach photos/videos of the room and a layout plan with dimensions (this can be done later if needed).
+
+2. **Application Review:**
+   - After receiving the questionnaire and information, we review the application and contact the client to clarify additional questions and provide answers to your inquiries.
+
+3. **Invoice and Prepayment:**
+   - After reviewing the application, if all the required materials are provided and the client's requirements are feasible, we issue an invoice for an advance payment (50% of the selected package cost).
+   - We don’t ask for any upfront payment at the beginning of the project. First, we gather all the necessary details and ensure your requirements are feasible, making sure we are on the same page.
+
+4. **Payment:**
+   - The remaining 50% is payable after completing the services and the client's approval of the work.
+   - The invoice and total cost of services are indicated in the order or invoice sent to the client electronically to the specified email address after agreeing on all project details. Payment confirmation will also be sent to the client's email.
+
+5. **Delivery and Timelines:**
+   - The project is completed within 21 days (not including the time for client review).
+   - The client receives the project as lifetime access to the **Wiki-board** on Notion, and the project is also compiled into a PDF album and sent to the client's email.
+
+6. **Payment Methods:**
+   - Payment is accepted by credit card.
+
+### **Client Interaction Procedure**
+1. **Communication Format:**
+   - All communications are conducted exclusively via email and WhatsApp; phone consultations are not provided.
+   - All project results are published on the **Wiki-board** — a special online platform based on Notion, which the client can access once the project begins.
+
+2. **Wiki-board:**
+   - **Description:** The Wiki-board is a centralized collaboration space where all project materials and results are stored. The client receives a link to access this space with commenting rights.
+   - **Purpose:** The Wiki-board contains initial data, visualizations, concepts, drawings, comments, shopping lists, and all documents and correspondence related to the project.
+   - **Comments and Feedback:** Clients can leave comments in the form of text messages and voice messages via WhatsApp, which will be integrated into the Wiki-board.
+
+3. **Consultations:**
+   - Roomy provides unlimited consultations (within reasonable limits) during the project. All inquiries are reviewed within 24 hours during business hours.
+
+### **Roomy Advantages:**
+- **Collaborate with Top Designers:** Work with designers from anywhere in the world, from home or office, with flexible scheduling and no travel needed.
+- **Faster Project Turnaround:** Streamlined online communication and real-time updates.
+- **Unique Interior Design:** Each project is custom-designed with the client’s budget and specific needs in mind, ensuring a one-of-a-kind interior.
+
+### **How Is the Contract Formed?**
+We operate under a public offer agreement, which is published on our official website (see the "Terms & Conditions" link in the footer of the homepage). This means that by making an advance payment, you accept the terms of this agreement. The completion of the final payment signifies that you have approved the work and have signed the work completion certificate. Therefore, there will be no paper version of the contract; our agreement is concluded electronically.
+
+### **Frequently Asked Questions (FAQ)**
+1. **Why does Roomy stand out?**
+   - Up to 5 revisions without additional cost.
+   - Realistic renders and VR tours.
+   - Step-by-step renovation guide.
+   - Support throughout the renovation process.
+   - Satisfaction guaranteed, with no hidden fees.
+
+2. **What guarantees does Roomy provide?**
+   - We revise the design until you are completely satisfied and, if necessary, replace the designer.
+
+3. **Who works on my project?**
+   - Our designers have architecture degrees and at least 3 years of industry experience.
+
+4. **What are the project timelines?**
+   - Typically, a project takes between 5–15 days, depending on complexity and how quickly feedback is provided.
+
+5. **Can I use my own furniture and materials?**
+   - Yes, just send us photos and details, and we will incorporate them into the design.
+
+6. **Which project should I choose?**
+   - For a simple interior refresh — the basic package.
+   - For an in-depth renovation — the full package.
+   - If you find it hard to envision the final result based solely on a concept board, we recommend ordering a **3D Visualization and VR Tour**. This is especially useful even for a simple refresh to see how selected elements will look in the real space.
+
+7. **What types of spaces do you serve?**
+   - We only work with residential spaces.
+
+### **Limitations and Responsibility**
+Roomy does not provide a technical project that grants permission for construction works, redevelopments, changes to building structures, electrical, or plumbing work; we only provide a visualization of how the space could theoretically look after renovation. Obtaining the necessary permits and the responsibility for carrying out the work and its consequences lies entirely with the client.
+
+**If the project exceeds the standard scope, Roomy reserves the right to change the cost of services. This includes projects for spaces over 50 sq.m or those with complex configurations.**
+
+---
