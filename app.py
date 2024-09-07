@@ -50,7 +50,7 @@ def chat_with_GPT(prompt, history):
             model="gpt-4o",
             messages=history + [{"role": "user", "content": prompt}]
         )
-        return response.choices[0].message['content'].strip()
+        return response.choices[0].message['content']
     except Exception as e:
         print(f"Error communicating with OpenAI: {e}")
         return "I'm sorry, but I couldn't process your request at this time. Please try again later."
