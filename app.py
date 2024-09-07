@@ -4,6 +4,7 @@ import requests
 from flask_cors import CORS
 import os
 import json
+import re  # Import the regular expressions module
 
 app = Flask(__name__)
 CORS(app)
@@ -43,14 +44,35 @@ def send_message_to_telegram(message, user_id):
     except requests.exceptions.RequestException as err:
         print(f"Oops: Something Else {err}")
 
+# Function to replace markdown syntax with HTML tags
+def format_markdown_to_html(text):
+    # Convert markdown headers (### for H3, ## for H2, and # for H1)
+    text = re.sub(r'### (.*)', r'<h3>\1</h3>', text)  # H3 headers
+    text = re.sub(r'## (.*)', r'<h2>\1</h2>', text)   # H2 headers
+    text = re.sub(r'# (.*)', r'<h1>\1</h1>', text)    # H1 headers
+
+    # Convert bold (**text**) to HTML bold <b>
+    text = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', text)
+
+    # Convert italics (*text*) to HTML italics <i>
+    text = re.sub(r'\*(.*?)\*', r'<i>\1</i>', text)
+
+    return text
+
+
 # Function to communicate with GPT-4 using chat history
 def chat_with_GPT(prompt, history):
     try:
         response = openai.ChatCompletion.create(
-            model="gpt-4o",
+            model="gpt-4",
             messages=history + [{"role": "user", "content": prompt}]
         )
-        return response.choices[0].message['content']
+        gpt_response = response.choices[0].message['content']
+
+        # Format GPT response to HTML
+        gpt_response = format_markdown_to_html(gpt_response)
+        
+        return gpt_response
     except Exception as e:
         print(f"Error communicating with OpenAI: {e}")
         return "I'm sorry, but I couldn't process your request at this time. Please try again later."
