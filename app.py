@@ -94,9 +94,18 @@ def load_session_history(user_id):
     except FileNotFoundError:
         return []
 
-# Function to limit the history to the last 20 messages (10 user + 10 assistant)
+# Function to limit the history to the last 20 user and assistant messages while keeping the system messages intact
 def limit_history(history):
-    return history[-20:]  # Limit to the last 20 messages (10 user + 10 assistant)
+    # Separate the system messages from the user and assistant messages
+    system_messages = [msg for msg in history if msg["role"] == "system"]
+    conversation_messages = [msg for msg in history if msg["role"] != "system"]
+    
+    # Limit the conversation messages to the last 20 (10 user + 10 assistant)
+    limited_conversation = conversation_messages[-20:]
+    
+    # Combine the system messages and the limited conversation messages
+    return system_messages + limited_conversation
+
 
 # Load the knowledge base
 knowledge_base = load_knowledge_base('knowledge.txt')
