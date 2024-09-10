@@ -5,6 +5,7 @@ from flask_cors import CORS
 import os
 import json
 import re  # Import the regular expressions module
+import logging  # Import logging for log outputs
 
 app = Flask(__name__)
 CORS(app)
@@ -16,6 +17,9 @@ TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
 # In-memory storage for session history (replace with a database in production)
 session_histories = {}
+
+# Setup logging to print to the Render logs
+logging.basicConfig(level=logging.INFO)
 
 # Function to load the knowledge base
 def load_knowledge_base(file_path):
@@ -36,13 +40,13 @@ def send_message_to_telegram(message, user_id):
         response = requests.post(url, json=payload)
         response.raise_for_status()  # Raises an HTTPError if the HTTP request returned an unsuccessful status code
     except requests.exceptions.HTTPError as errh:
-        print(f"Http Error: {errh}")
+        logging.error(f"Http Error: {errh}")
     except requests.exceptions.ConnectionError as errc:
-        print(f"Error Connecting: {errc}")
+        logging.error(f"Error Connecting: {errc}")
     except requests.exceptions.Timeout as errt:
-        print(f"Timeout Error: {errt}")
+        logging.error(f"Timeout Error: {errt}")
     except requests.exceptions.RequestException as err:
-        print(f"Oops: Something Else {err}")
+        logging.error(f"Oops: Something Else {err}")
 
 # Function to replace markdown syntax with HTML tags
 def format_markdown_to_html(text):
@@ -64,7 +68,7 @@ def format_markdown_to_html(text):
 def chat_with_GPT(prompt, history):
     try:
         response = openai.ChatCompletion.create(
-            model="gpt-4",
+            model="gpt-4o",
             messages=history + [{"role": "user", "content": prompt}]
         )
         gpt_response = response.choices[0].message['content']
@@ -74,7 +78,7 @@ def chat_with_GPT(prompt, history):
         
         return gpt_response
     except Exception as e:
-        print(f"Error communicating with OpenAI: {e}")
+        logging.error(f"Error communicating with OpenAI: {e}")
         return "I'm sorry, but I couldn't process your request at this time. Please try again later."
 
 # Function to save session history to a file
@@ -89,6 +93,10 @@ def load_session_history(user_id):
             return json.load(file)
     except FileNotFoundError:
         return []
+
+# Function to limit the history to the last 20 messages (10 user + 10 assistant)
+def limit_history(history):
+    return history[-20:]  # Limit to the last 20 messages (10 user + 10 assistant)
 
 # Load the knowledge base
 knowledge_base = load_knowledge_base('knowledge.txt')
@@ -117,6 +125,12 @@ def chat():
     # Append the user's message to the history
     session_histories[user_id].append({"role": "user", "content": prompt})
 
+    # Limit the session history to the last 20 messages
+    session_histories[user_id] = limit_history(session_histories[user_id])
+
+    # Log the user's message to Render logs
+    logging.info(f"User ({user_id}): {prompt}")
+
     # Send the user's message to Telegram for logging
     send_message_to_telegram(f"*💁 Client:* {prompt}", user_id)
 
@@ -125,6 +139,12 @@ def chat():
 
     # Append GPT's response to the history
     session_histories[user_id].append({"role": "assistant", "content": response})
+
+    # Limit the session history to the last 20 messages again after adding assistant response
+    session_histories[user_id] = limit_history(session_histories[user_id])
+
+    # Log the bot's response to Render logs
+    logging.info(f"Bot ({user_id}): {response}")
 
     # Save the session history to a file for persistence
     save_session_history(user_id)
