@@ -54,12 +54,9 @@ def format_markdown_to_html(text):
     text = re.sub(r'### (.*)', r'<h3>\1</h3>', text)  # H3 headers
     text = re.sub(r'## (.*)', r'<h2>\1</h2>', text)   # H2 headers
     text = re.sub(r'# (.*)', r'<h1>\1</h1>', text)    # H1 headers
-
-    # Convert bold (**text**) to HTML bold <b>
     text = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', text)
-
-    # Convert italics (*text*) to HTML italics <i>
     text = re.sub(r'\*(.*?)\*', r'<i>\1</i>', text)
+    text = text.replace('\n', '<br>')
 
     return text
 
